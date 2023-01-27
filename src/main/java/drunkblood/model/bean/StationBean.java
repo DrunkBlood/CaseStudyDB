@@ -1,4 +1,4 @@
-package drunkblood;
+package drunkblood.model.bean;
 
 import com.opencsv.bean.CsvBindByPosition;
 

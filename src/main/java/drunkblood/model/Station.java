@@ -1,4 +1,4 @@
-package drunkblood;
+package drunkblood.model;
 
 import java.util.Objects;
 

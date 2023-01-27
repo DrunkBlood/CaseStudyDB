@@ -1,6 +1,8 @@
-package drunkblood;
+package drunkblood.util;
 
 import com.opencsv.bean.CsvToBeanBuilder;
+import drunkblood.model.Station;
+import drunkblood.model.bean.StationBean;
 
 import java.io.FileNotFoundException;
 import java.io.FileReader;
@@ -19,6 +21,7 @@ public class DataHolder {
                 .build().parse();
         // remove header
         stations.remove(0);
+
         for(StationBean bean : stations){
             Station station = parseBeanToStation(bean);
             stationMap.put(station.getDs100(), station);

@@ -1,12 +1,15 @@
-package drunkblood;
+package drunkblood.server;
 
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
+import drunkblood.util.JsonBuilder;
+import drunkblood.ModelEditor;
+import drunkblood.model.Station;
+import drunkblood.util.DataHolder;
 import kong.unirest.json.JSONObject;
 
 import java.io.IOException;
 import java.io.OutputStream;
-import java.io.OutputStreamWriter;
 import java.net.URI;
 import java.nio.charset.StandardCharsets;
 
@@ -30,8 +33,8 @@ public class DistanceHandler implements HttpHandler {
                 String[] splitData = data.split("/");
                 if(splitData.length == 2){
                     String source = splitData[0];
-                    String dest = splitData[1];
-                    handleDataResponse(exchange, source, dest);
+                    String destination = splitData[1];
+                    handleDataResponse(exchange, source, destination);
                     return;
                 }
             }
@@ -40,18 +43,18 @@ public class DistanceHandler implements HttpHandler {
         errorNotFound(exchange);
     }
 
-    private void handleDataResponse(HttpExchange exchange, String source, String dest) throws IOException {
+    private void handleDataResponse(HttpExchange exchange, String source, String destination) throws IOException {
         if(!DataHolder.stationMap.containsKey(source)
-        || !DataHolder.stationMap.containsKey(dest)){
+        || !DataHolder.stationMap.containsKey(destination)){
             errorBadReqeust(exchange);
             return;
         }
         Station sourceStation = DataHolder.stationMap.get(source);
-        Station destStation = DataHolder.stationMap.get(dest);
-        int distance = ModelEditor.calculateStationDistance(sourceStation, destStation);
+        Station destinationStation = DataHolder.stationMap.get(destination);
+        int distance = ModelEditor.calculateStationDistance(sourceStation, destinationStation);
         JSONObject responseData = JsonBuilder.buildDistanceResponse(
                 sourceStation.getName(),
-                destStation.getName(),
+                destinationStation.getName(),
                 distance,
                 "km"
         );
